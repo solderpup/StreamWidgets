@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Youtube Fetch</title>
+        <link rel="stylesheet" href="css/global.css">
+        <link rel="stylesheet" href="css/fetch.css">
+    </head>
+    <body>
+        <div class="compositor ascii_art" id="fetch">
+<span style="color:var(--cyan)">         #*#   #*#           youtube.com/</span>@<span style="color:var(--cyan)">solderpup</span>
+<span style="color:var(--cyan)">        #**#   #**#          </span>----------------------
+<span style="color:var(--cyan)">        ***#   #***          The Modded Doggirl VTuber</span>
+<span style="color:var(--cyan)">        ***#   #***          </span>
+<span style="color:var(--cyan)">    ##  #**#   #**#  ##      Fan Name</span>:
+<span style="color:var(--cyan)">  #**##             ##**#    Art Tag</span>:
+<span style="color:var(--cyan)">  ***##    #####    ##***    Meme Tag</span>:
+<span style="color:var(--cyan)"> #***#    #*****#    #***#   </span>
+<span style="color:var(--cyan)"> #***#   ##*****##   #***#   Sub Goal</span>: <span id="sub-count">0</span>/500
+<span style="color:var(--cyan)">        #*********#          </span>
+<span style="color:var(--cyan)">     #***************#       </span>Reaching the sub goal is one
+<span style="color:var(--cyan)">    #*****************#      </span>step towards unlocking
+<span style="color:var(--cyan)">    ##***************##      </span>Memberships and Superchats!
+<span style="color:var(--cyan)">    #*******#*#*******#      </span>Every subscriber helps!
+<span style="color:var(--cyan)">     #***##     ##***#       </span>
+                             <span style="color:var(--black)">███</span><span style="color:var(--red)">███</span><span style="color:var(--green)">███</span><span style="color:var(--yellow)">███</span><span style="color:var(--blue)">███</span><span style="color:var(--purple)">███</span><span style="color:var(--cyan)">███</span><span style="color:var(--white)">███</span>
+                             <span style="color:var(--brightBlack)">███</span><span style="color:var(--brightRed)">███</span><span style="color:var(--brightGreen)">███</span><span style="color:var(--brightYellow)">███</span><span style="color:var(--brightBlue)">███</span><span style="color:var(--brightPurple)">███</span><span style="color:var(--brightCyan)">███</span><span style="color:var(--brightWhite)">███</span>
+                        </div>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script>
+            $(document).ready(() => {
+                const socket = io()
+
+                /*socket.on('event', event => {
+                    if (event.snippet.type === 'newSponsorEvent') {
+                        $('#newest-member').text(`${event.authorDetails.displayName} (${event.snippet.newSponsorDetails.memberLevelName})`)
+                    } else if (event.snippet.type === 'giftMembershipReceivedEvent') {
+                        $('#newest-member').text(`${event.authorDetails.displayName} (${event.snippet.giftMembershipReceivedDetails.memberLevelName})`)
+                    } else if (event.snippet.type === 'superChatEvent') {
+                        $('#latest-superchat').text(`${event.authorDetails.displayName} (${event.snippet.superChatDetails.amountDisplayString})`)
+                    } else if (event.snippet.type === 'superStickerEvent') {
+                        $('#latest-superchat').text(`${event.authorDetails.displayName} (${event.snippet.superStickerDetails.amountDisplayString})`)
+                    }
+                })*/
+
+                socket.on('channelUpdate', channel => {
+                    $('#sub-count').text(channel.statistics.subscriberCount)
+                })
+            })
+        </script>
+    </body>
+</html>

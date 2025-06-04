@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Youtube Lockscreen</title>
+        <link rel="stylesheet" href="css/global.css">
+        <link rel="stylesheet" href="css/lock.css">
+    </head>
+    <body>
+        <div id="lock">
+            <div id="date">Thursday, January 1, 1970</div>
+            <div id="clock">00:00:00</div>
+            <img src="img/PFP.jpg" alt="PFP">
+            <div id="username">solderpup</div>
+            <div id="password">The stream will start soon!</div>
+        </div>
+        <div id="power">
+            <span style="color: var(--red);">󰐥</span>
+            <span style="color: var(--yellow);"></span>
+            <span style="color: var(--green);">累</span>
+        </div>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script>
+            $(document).ready(() => {
+                const socket = io()
+                socket.on()
+
+                const date = () => {
+                    let today = new Date()
+                    const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+                    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+                    $("#date").text(`${weekdays[today.getDay()]}, ${months[today.getMonth()]} ${today.getDate()}, ${today.getFullYear()}`)
+                    setTimeout(date, 1000)
+                }
+                date()
+
+                const formatTime = digits => {
+                    if (digits < 10) digits = "0" + digits
+                    return digits
+                }
+
+                const clock = () => {
+                    let today = new Date()
+                    let hour = today.getHours()
+                    let minute = today.getMinutes()
+                    let second = today.getSeconds()
+                    hour = formatTime(hour)
+                    minute = formatTime(minute)
+                    second = formatTime(second)
+                    $('#clock').text(`${hour}:${minute}:${second}`)
+                    setTimeout(clock, 1000)
+                }
+                clock()
+            })
+        </script>
+    </body>
+</html>

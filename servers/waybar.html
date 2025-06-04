@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Youtube Waybar (AGS)</title>
+        <link rel="stylesheet" href="css/global.css">
+        <link rel="stylesheet" href="css/waybar.css">
+    </head>
+    <body>
+        <div id="waybar">
+            <div class="section" id="left-section">
+                <div class="segment" id="os"></div>
+                <div class="segment" id="power">
+                    <span style="color: var(--red); padding-right: 24px;">󰐥</span>
+                    <span style="color: var(--yellow); padding-right: 24px;"></span>
+                    <span style="color: var(--green);">累</span>
+                </div>
+                <div class="segment" id="tray"> ﭮ   󰄛</div>
+                <div class="segment" id="focused">Just Chatting</div>
+            </div>
+            
+            <div class="section" id="center-section">
+                <div class="segment" id="workspaces">
+                    <span id="ws1" style="color: var(--blue); padding-right: 24px;"></span>
+                    <span id="ws2" style="color: var(--green); padding-right: 24px;">暴</span>
+                    <span id="ws3" style="color: var(--green); padding-right: 24px;">暴</span>
+                    <span id="ws4" style="color: var(--green);">暴</span>
+                </div>
+            </div>
+            
+            <div class="section" id="right-section">
+                <div class="segment" id="options">
+                    <span style="color: var(--cyan); padding-right: 16px;"> EN-CA</span>
+                    <span style="color: var(--green); padding-right: 16px;"> 󰕾</span>
+                    <span style="color: var(--yellow); padding-right: 16px;">󰍬</span>
+                    <span style="color: var(--red); padding-right: 16px;">󰈀</span>
+                    <span style="color: var(--blue);"></span>
+                </div>
+                <div class="segment" id="clock">16:44:00</div>
+                <div class="segment" id="subscribe">
+                    <span style="color: var(--red); padding-right: 8px;">󰗃</span>
+                    Subscribe
+                    <span style="color: var(--blue); padding-left: 8px;"></span>
+                </div>
+                <div class="segment" id="notification">󰂜</div>
+            </div> 
+        </div>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="js/settings.js"></script>
+        <script>
+            $(document).ready(() => {
+                const socket = io()
+                socket.on('CurrentProgramSceneChanged', event => {
+                    if (event.sceneName == 'Chatting') {
+                        $('#focused').text('Just Chatting')
+                        $('#ws1').css('color', 'var(--blue)')
+                        $('#ws1').text('')
+                        $('#ws2').css('color', 'var(--green)')
+                        $('#ws2').text('暴')
+                        $('#ws3').css('color', 'var(--green)')
+                        $('#ws3').text('暴')
+                        $('#ws4').css('color', 'var(--green)')
+                        $('#ws4').text('暴')
+                    } else if (event.sceneName == 'Large Window') {
+                        $('#focused').text(settings.playing)
+                        $('#ws2').css('color', 'var(--blue)')
+                        $('#ws2').text('')
+                        $('#ws1').css('color', 'var(--green)')
+                        $('#ws1').text('暴')
+                        $('#ws3').css('color', 'var(--green)')
+                        $('#ws3').text('暴')
+                        $('#ws4').css('color', 'var(--green)')
+                        $('#ws4').text('暴')
+                    } else if (event.sceneName == 'Large and Small Windows') {
+                        $('#focused').text(settings.playing)
+                        $('#ws3').css('color', 'var(--blue)')
+                        $('#ws3').text('')
+                        $('#ws2').css('color', 'var(--green)')
+                        $('#ws2').text('暴')
+                        $('#ws1').css('color', 'var(--green)')
+                        $('#ws1').text('暴')
+                        $('#ws4').css('color', 'var(--green)')
+                        $('#ws4').text('暴')
+                    } else if (event.sceneName == 'Schedule') {
+                        $('#focused').text('Schedule')
+                        $('#ws4').css('color', 'var(--blue)')
+                        $('#ws4').text('')
+                        $('#ws2').css('color', 'var(--green)')
+                        $('#ws2').text('暴')
+                        $('#ws3').css('color', 'var(--green)')
+                        $('#ws3').text('暴')
+                        $('#ws1').css('color', 'var(--green)')
+                        $('#ws1').text('暴')
+                    }
+                })
+
+                const formatTime = digits => {
+                    if (digits < 10) digits = "0" + digits
+                    return digits
+                }
+
+                const clock = () => {
+                    let time = new Date()
+                    let hour = time.getHours()
+                    let minute = time.getMinutes()
+                    let second = time.getSeconds()
+                    hour = formatTime(hour)
+                    minute = formatTime(minute)
+                    second = formatTime(second)
+
+                    $('#clock').text(`${hour}:${minute}:${second}`)
+                    setTimeout(clock, 1000)
+                }
+                clock()
+            })
+        </script>
+    </body>
+</html>

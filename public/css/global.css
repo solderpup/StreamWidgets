@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css?family=JetBrains Mono');
+@import url('https://fonts.googleapis.com/css?family=Noto Color Emoji');
+@font-face {
+    font-family: 'Meslo';
+    src: url('./fonts/mesloLGS_NF_regular.woff2') format('woff2'),
+        url('./fonts/mesloLGS_NF_regular.woff') format('woff'),  
+        url('./fonts/mesloLGS_NF_regular.ttf') format('truetype');
+}
+* {
+    font-family: 'JetBrains Mono', 'Noto Color Emoji', 'Meslo', monospace;
+    color: var(--white);
+    font-size: 30px;
+    text-align: center;
+    align-content: center;
+}
+
+:root {
+    --background: #404040CC;
+    --black: #2C2C2C;
+    --blue: #5CCFFB;
+    --brightBlack: #767676;
+    --brightBlue: #2AC0FA;
+    --brightCyan: #84FFF6;
+    --brightGreen: #5EE06D;
+    --brightPurple: #F17996;
+    --brightRed: #FF5148;
+    --brightWhite: #F2F2F2;
+    --brightYellow: #FCFC64;
+    --cyan: #B7FFFA;
+    --green: #89E894;
+    --purple: #F6A7BA;
+    --red: #FF6961;
+    --white: #CCCCCC;
+    --yellow: #FDFD96;
+    --margin: 6px;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+.compositor {
+    background-color: var(--background);
+
+    border-style: solid;
+    border-color: var(--brightBlue);
+    border-radius: 40px;
+    border-width: 6px;
+
+    height: calc(100% - var(--margin) * 2);
+    width: calc(100% - var(--margin) * 2);
+
+    margin: var(--margin);
+
+    box-sizing: border-box;
+}
+
+.ascii_art {
+    white-space: pre !important;
+}

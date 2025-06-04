@@ -1,0 +1,22 @@
+#VS Code
+.vscode/
+
+#Node JS
+node_modules/
+
+#Logs
+logs
+*.log
+npm-debug.log*
+
+#NPM
+.npm
+
+#ES Lint
+.eslint
+
+#REPL
+.node_repl
+
+#ENV
+*.env

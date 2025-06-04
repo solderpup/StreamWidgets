@@ -1,0 +1,151 @@
+body{
+    display: flex;
+    flex-direction: row;
+}
+
+#left_elements{
+    width: 50%;
+}
+
+#image{
+    position: relative;
+}
+
+img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.attribution{
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.platform{
+    bottom: 8px;
+    right: 8px;
+    background-color: var(--black);
+    color: var(--white);
+    border-radius: 9999px;
+    padding: 24px;
+    margin: 8px;
+    font-size: 40px;
+}
+
+#right_elements{
+    width: 50%;
+}
+
+#schedule{
+    display: flex;
+    flex-direction: column;
+    padding: 4px;
+}
+
+#schedule_header{
+    display: flex;
+    flex-direction: row;
+}
+
+#schedule_text{
+    font-size: 36px;
+    flex-grow: 1;
+    color: var(--cyan);
+}
+
+#calendar{
+    display: flex;
+    flex-direction: column;
+    background: var(--black);
+    border-radius: 32px;
+    padding: 8px;
+    margin: 8px 8px 8px 0px;
+    flex-grow: 0;
+    height: fit-content;
+    align-self: flex-start;
+}
+
+.calendar_row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#calendar_weekdays>.calendar_cell{
+    background: none;
+}
+
+.calendar_cell{
+    background: var(--brightBlack);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin: 8px;
+}
+
+.calendar_cell_previous_month, .calendar_cell_next_month{
+    background: none;
+}
+
+.calendar_row_active>.calendar_cell{
+    background: var(--blue);
+    color: var(--black);
+}
+
+.schedule_row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.schedule_element{
+    background: var(--black);
+    margin: 8px;
+    padding: 8px;
+    border-radius: 9999px;
+}
+
+.schedule_day_name{
+    flex-grow: 0;
+    padding: 32px;
+    height: 64px;
+    width: 64px;
+    border-radius: 50%;
+    background-color: var(--blue);
+    color: var(--black);
+    align-self: center;
+    font-size: 40px;
+}
+
+.schedule_day_off{
+    flex-grow: 1;
+    font-size: 40px;
+}
+
+.schedule_itinerary{
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+
+.schedule_activity{
+    flex-grow: 1;
+    font-size: 40px;
+}
+
+.schedule_timeframe{
+    flex-grow: 0;
+    background: var(--blue);
+    color: var(--black);
+    border-radius: 9999px;
+    padding: 24px;
+    font-size: 40px;
+    height: fit-content;
+    align-self: flex-end;
+}

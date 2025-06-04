@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Youtube Calendar</title>
+        <link rel="stylesheet" href="css/global.css">
+        <link rel="stylesheet" href="css/calendar.css">
+    </head>
+    <body>
+        <div id="left_elements">
+            <div class="compositor" id="image">
+                <img src="/img/schedule_art.png">
+            </div>
+        </div>
+        <div id="right_elements">
+            <div class="compositor" id="schedule">
+                <div id="schedule_header">
+                    <div class="ascii_art" id="schedule_text">        _____ _______ _____  ______          __  __       
+      / ____|__   __|  __ \|  ____|   /\   |  \/  |      
+     | |___    | |  | |__| | |__     /  \  | \  / |      
+      \___ \   | |  |  _  /|  __|   / /\ \ | |\/| |      
+      ____| |  | |  | | \ \| |____ / ____ \| |  | |      
+  ___|_____/__ |_|  |_|__\_\______/_/    \_\_|  |_|_____ 
+ / ____|/ ____| |  | |  ____|  __ \| |  | | |    |  ____|
+| |___ | |    | |__| | |__  | |  | | |  | | |    | |__   
+ \___ \| |    |  __  |  __| | |  | | |  | | |    |  __|  
+ ____| | |____| |  | | |____| |__| | |__| | |____| |____ 
+|_____/ \_____|_|  |_|______|_____/ \____/|______|______|</div>
+                    <div id="calendar">
+                        <div id="calendar_month"></div>
+                        <div class="calendar_row" id="calendar_weekdays">
+                            <div class="calendar_cell">SU</div>
+                            <div class="calendar_cell">MO</div>
+                            <div class="calendar_cell">TU</div>
+                            <div class="calendar_cell">WE</div>
+                            <div class="calendar_cell">TH</div>
+                            <div class="calendar_cell">FR</div>
+                            <div class="calendar_cell">SA</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="js/settings.js"></script>
+        <script>
+            $(document).ready(() => {
+                const daysInMonth = new Date(settings.year, settings.month + 1, 0).getDate();
+                const daysInPreviousMonth = new Date(settings.year, (settings.month) % 12, 0).getDate();
+                const firstDayOfWeek = new Date(settings.year, settings.month, 1).getDay();
+
+                //Month and Year Header
+                const monthNames = [
+                    'January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'
+                ];
+                $('#calendar_month').text(`${monthNames[settings.month]} ${settings.year}`);
+
+                //Days in previous Month
+                let dayInPreviousMonth = daysInPreviousMonth - firstDayOfWeek + 1
+                let row = 0
+                let calendarRow = $('<div></div>').addClass('calendar_row')
+                if (row == settings.week) calendarRow.addClass('calendar_row_active')
+                for (let day = daysInPreviousMonth - firstDayOfWeek + 1; day <= daysInPreviousMonth; day++) {
+                    calendarRow.append($(`<div></div>`).addClass('calendar_cell calendar_cell_previous_month').text(day))
+                }
+                
+                //Days in current Month
+                for (let day = 1; day <= daysInMonth; day++) {
+                    if ((firstDayOfWeek + day - 1) % 7 == 0 && day != 1) {
+                        row++
+                        $(`#calendar`).append(calendarRow)
+                        calendarRow = $('<div></div>').addClass('calendar_row')
+                        if (row == settings.week) calendarRow.addClass('calendar_row_active')
+                    }
+                    calendarRow.append($(`<div></div>`).addClass('calendar_cell').text(day))
+                }
+
+                //Days in next Month
+                if ((firstDayOfWeek + daysInMonth) % 7 != 0) {
+                    for (let day = 1; day <= 7 - (firstDayOfWeek + daysInMonth) % 7; day++) {
+                        calendarRow.append($(`<div></div>`).addClass('calendar_cell calendar_cell_next_month').text(day))
+                    }
+                }
+                $(`#calendar`).append(calendarRow)
+                
+                //Schedule
+                const weekdays = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA']
+                for (let i = 0; i < 7; i++) {
+                    let scheduleRow = $(`<div></div>`).addClass('schedule_row')
+                    scheduleDayName = $(`<div></div>`).addClass(`schedule_element schedule_day_name`).text(weekdays[i])
+                    scheduleRow.append(scheduleDayName)
+                    //Days Off
+                    if (settings.schedule[i].length == 0) {
+                        let dayOff = $(`<div class='schedule_element schedule_day_off'></div>`)
+                        dayOff.text(settings.daysOff[Math.floor(Math.random() * settings.daysOff.length)])
+                        scheduleRow.append(dayOff)
+                    //Days On
+                    } else {
+                        for (let j = 0; j < settings.schedule[i].length; j++) {
+                            let event = settings.schedule[i][j]
+                            let itinerary = $('<div></div>').addClass('schedule_element schedule_itinerary')
+                            let activity = $(`<div></div>`).addClass('schedule_activity')
+                            let timeframe = $('<div></div>').addClass('schedule_timeframe')
+                            activity.text(event.activity)
+                            timeframe.text(`${event.start} - ${event.end} ET`)
+                            itinerary.append(activity)
+                            itinerary.append(timeframe)
+                            scheduleRow.append(itinerary)
+                        }
+                    }
+                    $(`#schedule`).append(scheduleRow)
+                }
+
+                //Image Attribution
+                let attribution = $('<div></div>').addClass('attribution')
+                let artist = $('<div></div>').addClass('platform').text(`Art by: ${settings.attribution.artist}`)
+                attribution.append(artist)
+                for (let i = 0; i < settings.attribution.platforms.length; i++) {
+                    let platform = $('<div></div>').addClass('platform')
+                    platform.text(`${settings.attribution.platforms[i].platform} | ${settings.attribution.platforms[i].name}`)
+                    attribution.append(platform)
+                }
+                $('#image').prepend(attribution)
+            })
+        </script>
+    </body>
+</html>

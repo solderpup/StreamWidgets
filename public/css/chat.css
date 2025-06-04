@@ -1,0 +1,67 @@
+#chat {
+    display: flex;
+    flex-direction: column;
+}
+
+.event{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 32px;
+}
+
+.event-header{
+    display: flex;
+    align-items: center;
+    width: 99%;
+    margin-bottom: 8px;
+}
+.divider{
+    flex: 1;
+    border-top-style: solid;
+    border-top-color: var(--brightBlack);
+    border-top-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: var(--brightBlack);
+    border-bottom-width: 2px;
+}
+
+.header-element{
+    border-style: hidden;
+    border-radius: 32px;
+    padding: 8px 32px;
+    color: var(--black);
+}
+.username-owner{
+    background-color: var(--yellow);
+    margin-right: auto;
+}
+.username-members{
+    background-color: var(--green);
+    margin-right: auto;
+}
+.username-moderators{
+    background-color: var(--purple);
+    margin-right: auto;
+}
+.username-viewers{
+    background-color: var(--blue);
+    margin-right: auto;
+}
+.superchat{
+    background-color: var(--red);
+}
+.membership{
+    background-color: var(--brightGreen);
+}
+
+.timestamp{
+    background-color: var(--white);
+    color: var(--black);
+}
+
+.event-body{
+    padding: 0px 12px;
+    text-align: left;
+}

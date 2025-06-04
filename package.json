@@ -1,0 +1,19 @@
+{
+  "name": "chat",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Display YT chat to webpage which can be loaded by OBS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "solderpup",
+  "license": "ISC",
+  "dependencies": {
+    "@googleapis/youtube": "^24.0.0",
+    "express": "^5.1.0",
+    "googleapis": "^148.0.0",
+    "obs-websocket-js": "^5.0.6",
+    "socket.io": "^4.8.1"
+  }
+}
