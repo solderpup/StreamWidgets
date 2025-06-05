@@ -1,3 +1,10 @@
+<!-- TODO
+    Delete Message and Delete Messages Event
+    Polls?? I've seen nothing about them in the docs, but they don't work properly right now
+    Membership badges
+    Vanity tiers
+-->
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,6 +20,8 @@
         <script src="js/sticker_ids_to_urls.js"></script>
         <script>
             $(document).ready(() => {
+                /* Takes a message and searches for :colon-form: emote names from emote_names_to_urls.js
+                If it finds one, it inserts the matching image tag */
                 const parseEmotes = text => {
                     let newText = text
                     let regex = /:[^\s:]+:/g
@@ -33,9 +42,12 @@
                 socket.on('chat_event', event => {
                     console.log('chat event: ', event)
                     let eventHTML = $('<div>', {'class': 'event', id: event.id})
-                    let eventHeader = $('<div>', {'class': 'event-header'})
-                    let eventBody = $('<div>', {'class': 'event-body'})
+                    let eventHeader = $('<div>', {'class': 'event-header'}) // The top bar with all the bubbles
+                    let eventBody = $('<div>', {'class': 'event-body'}) // The actual message
 
+                    // Username
+                    /* This one is universal, since every message type has a user associated.
+                    After this, we do the unique parts, then finally we add the divider and timestamp. */
                     let usertype = 'viewers'
                     if (event.authorDetails.isChatOwner) usertype = 'owner'
                     else if (event.authorDetails.isChatModerator) usertype = 'moderators'
@@ -43,53 +55,63 @@
                     let username = $('<span>', {'class': `header-element username-${usertype}`}).text(`~/${usertype}/${event.authorDetails.displayName}`)
                     $(eventHeader).append(username)
 
+                    // Messages
                     if (event.snippet.type === 'textMessageEvent') {
                         $(eventBody).text(event.snippet.textMessageDetails.messageText)
                         $(eventBody).html(parseEmotes($(eventBody).text()))
                         $(eventBody).prepend($('<span>', {style: 'color:var(--brightGreen)'}).text('❯ '))
-
+                    
+                    // Members Only Off
                     } else if (event.snippet.type === 'sponsorOnlyModeEndedEvent') {
                         $(eventBody).text('Members only mode has ended')
                         $(eventBody).prepend($('<span>', {style: 'color:var(--brightYellow)'}).text('❯ '))
-
+                    
+                    // Members Only On
                     } else if (event.snippet.type === 'sponsorOnlyModeStartedEvent') {
                         $(eventBody).text('Members only mode has started')
                         $(eventBody).prepend($('<span>', {style: 'color:var(--brightYellow)'}).text('❯ '))
-
+                    
+                    // New Member
                     } else if (event.snippet.type === 'newSponsorEvent') {
                         $(eventHeader).append($('<span>', {'class': 'header-element membership'}).text(event.snippet.newSponsorDetails.isUpgrade ? 'Membership Upgrade' : 'New Member'))
                         $(eventBody).text(`Thank you for joining the ${event.snippet.newSponsorDetails.memberLevelName} tier!`)
                         $(eventBody).prepend($('<span>', {style: 'color:var(--brightYellow)'}).text('❯ '))
-
+                    
+                    // The Monthly Superchat Thingy Members Get Apparently IDK
                     } else if (event.snippet.type === 'memberMilestoneChatEvent') {
                         $(eventHeader).append($('<span>', {'class': 'header-element membership'}).text(`${event.snippet.memberMilestoneChatDetails.memberMonth} Month Milestone`))
                         $(eventBody).text(event.snippet.memberMilestoneChatDetails.userComment)
                         $(eventBody).html(parseEmotes($(eventBody).text()))
                         $(eventBody).prepend($('<span>', {style: 'color:var(--brightRed)'}).text('❯ '))
-
+                    
+                    // Superchats
                     } else if (event.snippet.type === 'superChatEvent') {
                         $(eventHeader).append($('<span>', {'class': 'header-element superchat'}).text(event.snippet.superChatDetails.amountDisplayString))
                         $(eventBody).text(event.snippet.superChatDetails.userComment)
                         $(eventBody).html(parseEmotes($(eventBody).text()))
                         $(eventBody).prepend($('<span>', {style: 'color:var(--brightRed)'}).text('❯ '))
-
+                    
+                    // Super Sticker
                     } else if (event.snippet.type === 'superStickerEvent') {
                         $(eventHeader).append($('<span>', {'class': 'header-element superchat'}).text(event.snippet.superStickerDetails.amountDisplayString))
                         $(eventBody).append($('<img>', {src: stickerURLs[event.snippet.superStickerDetails.superStickerMetadata.stickerId], width: '48', height: '48'}))
                         $(eventBody).html(parseEmotes($(eventBody).text()))
                         $(eventBody).prepend($('<span>', {style: 'color:var(--brightRed)'}).text('❯ '))
                     
+                    // Membership Gift Giving
                     } else if (event.snippet.type === 'membershipGiftingEvent') {
                         $(eventHeader).append($('<span>', {'class': 'header-element membership'}).text('Membership Gift'))
                         $(eventBody).text(`${event.authorDetails.displayName} gifted ${event.snippet.membershipGiftingDetails.giftmembershipCount} ${event.snippet.membershipGiftingDetails.memberLevelName} tier memberships!`)
                         $(eventBody).prepend($('<span>', {style: 'color:var(--brightYellow)'}).text('❯ '))
-
+                    
+                    // Membership Gift Receieved
                     } else if (event.snippet.type === 'giftMembershipReceivedEvent') {
                         $(eventHeader).append($('<span>', {'class': 'header-element membership'}).text('Membership Gift'))
                         $(eventBody).text(`Thanks to a generous gift, you joined the ${event.snippet.giftMembershipReceivedDetails.memberLevelName} tier!`)
                         $(eventBody).prepend($('<span>', {style: 'color:var(--brightYellow)'}).text('❯ '))
                     }
 
+                    // Timestamp and Divider
                     let divider = $('<span>', {'class': 'divider'})
                     $(eventHeader).append(divider)
 
@@ -106,7 +128,8 @@
                     $(eventHTML).append(eventHeader)
                     $(eventHTML).append(eventBody)
                     $('#chat').append(eventHTML)
-
+                    
+                    // Remove old messages
                     if ($('#chat > div').length > 10) $('#chat > div').eq(0).remove()
                 })
             })   

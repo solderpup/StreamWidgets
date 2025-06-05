@@ -18,7 +18,7 @@ const googleAPI = {
  */
 googleAPI.authorize = () => {
     fs.readFile('./client_secret.env', (err, credentialsJSON) => {
-        if (err) {
+        if (err) { // No client_secret.env
             console.error('Failed to load credentials. Please save your client id, client secret, and redirect uri to client_secret.env')
             return
         } else {
@@ -31,16 +31,16 @@ googleAPI.authorize = () => {
             )
 
             fs.readFile('./google_token.env', (err, tokenJSON) => {
-                if (err) {
+                if (err) { // No google_token.env
                     console.log('Failed to load google api token. Generating new token...')
                     generateAuthUrl()
                 } else {
                     let token = JSON.parse(tokenJSON)
 
-                    if (token.expiry_date < Date.now()) {
+                    if (token.expiry_date < Date.now()) { // Token expired
                         console.log('Existing google api token is expired. Generating new token...')
                        generateAuthUrl()
-                    } else {
+                    } else { // Token good
                         googleAPI.oauth2Client.setCredentials(token)
                         console.log('Set existing google api token')
                         startTracking(token)

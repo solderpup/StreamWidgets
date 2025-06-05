@@ -1,3 +1,8 @@
+/* TODO
+    Consolidate the servers into one server with subdirectories. I think that's a thing you can do. It'd probably be better.
+    Add Dunst.
+*/
+
 import * as oauth2 from './servers/oauth.js'
 import * as chat from './servers/chat.js'
 import * as fetch from './servers/fetch.js'

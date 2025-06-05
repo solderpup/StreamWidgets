@@ -49,8 +49,33 @@
         <script src="js/settings.js"></script>
         <script>
             $(document).ready(() => {
+                // Add a leading 0 to single digits
+                const formatTime = digits => {
+                    if (digits < 10) digits = "0" + digits
+                    return digits
+                }
+
+                //Write the current time and rerun one second later
+                const clock = () => {
+                    let time = new Date()
+                    let hour = time.getHours()
+                    let minute = time.getMinutes()
+                    let second = time.getSeconds()
+                    hour = formatTime(hour)
+                    minute = formatTime(minute)
+                    second = formatTime(second)
+
+                    $('#clock').text(`${hour}:${minute}:${second}`)
+                    setTimeout(clock, 1000)
+                }
+                clock()
+
                 const socket = io()
                 socket.on('CurrentProgramSceneChanged', event => {
+                    // WORKSPACE INDICATOR
+                    /* This is the part where you learn I'm bad at programming.
+                    There's almost certainly a better way to do this, but I can't be f*cked right now.
+                    It works. Take it or leave it.*/
                     if (event.sceneName == 'Chatting') {
                         $('#focused').text('Just Chatting')
                         $('#ws1').css('color', 'var(--blue)')
@@ -93,25 +118,6 @@
                         $('#ws1').text('暴')
                     }
                 })
-
-                const formatTime = digits => {
-                    if (digits < 10) digits = "0" + digits
-                    return digits
-                }
-
-                const clock = () => {
-                    let time = new Date()
-                    let hour = time.getHours()
-                    let minute = time.getMinutes()
-                    let second = time.getSeconds()
-                    hour = formatTime(hour)
-                    minute = formatTime(minute)
-                    second = formatTime(second)
-
-                    $('#clock').text(`${hour}:${minute}:${second}`)
-                    setTimeout(clock, 1000)
-                }
-                clock()
             })
         </script>
     </body>
