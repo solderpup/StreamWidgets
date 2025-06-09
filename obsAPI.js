@@ -16,7 +16,7 @@ const refreshBrowserSource = async inputName => {
         await obs.call('PressInputPropertiesButton', {inputName, propertyName: 'refreshnocache'})
         console.log(`Refreshed obs browser source ${inputName}`)
     } catch (err) {
-        console.error(`Failed to refresh obs browser source ${inputName}`, err.code, err.message)
+        console.log(`Failed to refresh obs browser source ${inputName}`)
     }
 }
 
@@ -36,7 +36,7 @@ obsAPI.connect = async () => {
         refreshBrowserSource('Lock')
         refreshBrowserSource('Calendar')
     } catch (err) {
-        console.error('Failed to connect to obs server', err.code, err.message);
+        console.log('Failed to connect to obs server');
         console.log(`Attempting reconnect to OBS in ${settings.obsInterval / 1000} second(s)`)
         return setTimeout(obsAPI.connect, settings.obsInterval)
     }

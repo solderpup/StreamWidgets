@@ -20,7 +20,12 @@ const vtubeAPI = {
  */
 vtubeAPI.connect = () => {
     vtubeAPI.websocket = new WebSocket('ws://0.0.0.0:8001')
-    vtubeAPI.websocket.addEventListener("error", err => {retryConnection()})
+    vtubeAPI.websocket.addEventListener("error", err => {
+        console.log("Failed to connect to Vtube Studio API")
+        console.log(`Attempting reconnect to Vtube in ${settings.vtubeInterval / 1000} seconds`)
+        vtubeAPI.websocket.terminate()
+        setTimeout(vtubeAPI.connect, settings.vtubeInterval)
+    })
     vtubeAPI.websocket.on('open', async () => {
         console.log('Connected to VTube Studio WebSocket');
 

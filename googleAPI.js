@@ -109,14 +109,11 @@ const startTracking = () => {
     })
 
     getChannel()
-    const channelInterval = 60000
-    setInterval(getChannel, channelInterval)
-    
     findActiveChat()
 }
 
 /**
- * Once client is connected, call api to find chat id and set interval to fetch chat
+ * Once client is connected, call api to find chat id
  */
 const findActiveChat = () => {
     youtube.liveBroadcasts.list({
@@ -124,13 +121,16 @@ const findActiveChat = () => {
         part: 'snippet',
         mine: 'true'
     }, (err, response) => {
-        if (err) return console.error ('Error finding active chat', err)
+        if (err) {
+            console.log(`Couldn't find active chat. Trying again in ${settings.findChatInterval / 1000} seconds`)
+            setTimeout(findActiveChat, settings.findChatInterval)
+        } else {
+            const latestChat = response.data.items[0]
+            let liveChatId = latestChat.snippet.liveChatId
+            console.log('Chat ID found', liveChatId)
 
-        const latestChat = response.data.items[0]
-        let liveChatId = latestChat.snippet.liveChatId
-        console.log('Chat ID found', liveChatId)
-
-        getChat(liveChatId, null)
+            getChat(liveChatId, null)
+        }
     })
 }
 
@@ -150,6 +150,8 @@ const getChannel = () => {
         //console.log('channel: ', response.data.items[0])
         fetch.io.emit('channelUpdate', response.data.items[0])
     })
+
+    setTimeout(getChannel, settings.channelInterval)
 }
 
 
@@ -169,21 +171,22 @@ const getChat = (liveChatId, nextPage) => {
         pageToken: nextPage
     }, (err, response) => {
         if (err) {
-            console.error('Error getting chat messages', err)
-            return null
-        }
-        
-        const newChatEvents = response.data.items
-        newChatEvents.forEach(chatEvent => {
-            //console.log('chat event: ', event)
-            chat.io.emit('chat_event', chatEvent)
-            fetch.io.emit('chat_event', chatEvent)
+            console.log(`Couldn't find active chat. Trying again in ${settings.findChatInterval / 1000} seconds`)
+            setTimeout(() => getChat(liveChatId, nextPage), settings.findChatInterval)
+        } else {
+            const newChatEvents = response.data.items
+            newChatEvents.forEach(chatEvent => {
+            
+                //console.log('chat event: ', event)
+                chat.io.emit('chat_event', chatEvent)
+                fetch.io.emit('chat_event', chatEvent)
 
-            if (chatEvent.type == "superChatEvent") {
-                vtubeAPI.parseSuperchat(chatEvent)
-            }
-        })
-        setTimeout(() => getChat(liveChatId, response.data.nextPageToken), settings.chatInterval)
+                if (chatEvent.type == "superChatEvent") {
+                    vtubeAPI.parseSuperchat(chatEvent)
+                }
+            })
+            setTimeout(() => getChat(liveChatId, response.data.nextPageToken), settings.chatInterval)
+        }
     })
 }
 
