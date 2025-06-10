@@ -129,6 +129,22 @@ const findActiveChat = () => {
             let liveChatId = latestChat.snippet.liveChatId
             console.log('Chat ID found', liveChatId)
 
+            chat.io.emit('chat_event', {
+                id: "1",
+                authorDetails: {
+                    isChatOwner: true,
+                    isChatModerator: false,
+                    isChatSponsor: false,
+                    displayName: "solderpup"
+                },
+                snippet: {
+                    type: "textMessageEvent",
+                    publishedAt: "00000000000000000000",
+                    textMessageDetails: {
+                        messageText: "hello world"
+                    }
+                }
+            })
             getChat(liveChatId, null)
         }
     })

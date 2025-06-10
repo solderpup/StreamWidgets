@@ -1,7 +1,7 @@
 const settings = {
-    playing: "Linkle's Second Wind",
-    week: 3,
-    month: 7,
+    playing: "VS Code",
+    week: 1,
+    month: 5,
     year: 2025,
     daysOff: [
         "chasing my tail",
@@ -14,20 +14,18 @@ const settings = {
         "hiding from the vacuum"
     ],
     schedule: [
-        [{activity: "NS2 Welcome Tour", start: '1630', end: '0200'},
-        {activity: "Yapping", start: '2230', end: '2330'}],
-        [{activity: "Linkle's Ballad", start: '0215', end: '0200'}],
-        [{activity: "Super Mario Eclipse", start: '900', end: '1800'}],
-        [{activity: "Soldering", start: '1230', end: '2200'}],
         [],
+        [],
+        [{activity: "Coding Stream - Chatbot", start: '6PM', end: '9PM'}],
+        [{activity: "Mario Kart World", start: '6PM', end: '9PM'}],
+        [{activity: "Super Mario Eclipse", start: '6PM', end: '9PM'}],
         [],
         [],
     ],
     attribution: {
-        artist: "solderpup",
+        artist: "Vivila777",
         platforms: [
-            {platform: "bluesky", name: "@solderpup"},
-            {platform: "github", name: "solderpup"}
+            {platform: "X", name: "@vivila777"}
         ]
     }  
 }

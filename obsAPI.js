@@ -30,6 +30,8 @@ obsAPI.connect = async () => {
         const {obsWebSocketVersion, negotiatedRpcVersion} = await obs.connect('ws://localhost:4455', '40QxzWqNCK7dLKGW', {rpcVersion: 1})
         console.log(`Connected to obs server ${obsWebSocketVersion} (using RPC ${negotiatedRpcVersion})`)
 
+        /* Refresh Browser Source is called to refresh the webpages each time the program is launched.
+        It expects each repective source to have the following names. If you don't use these names in OBS, change them here.*/
         refreshBrowserSource('Chat')
         refreshBrowserSource('Fetch')
         refreshBrowserSource('Waybar')
