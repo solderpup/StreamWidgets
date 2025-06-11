@@ -47,7 +47,7 @@ vtubeAPI.connect = () => {
  * @param {Object} request A Vtube API request
  * @returns {Promise{Object}} The response from Vtube API or an error
  */
-const sendRequest = request => {
+vtubeAPI.sendRequest = request => {
     return new Promise((resolve, reject) => {
         vtubeAPI.websocket.send(JSON.stringify(request))
 
@@ -77,7 +77,7 @@ const getNewAuthToken = () => {
 	    }
     }
 
-    sendRequest(authRequest).then(response => {
+    vtubeAPI.sendRequest(authRequest).then(response => {
         if (Object.hasOwn(response.data, 'authenticationToken')) {
             fs.writeFile('./vtube_token.env', response.data.authenticationToken, err => {
                 if (err) console.error('Error storing vtube api token', err)
@@ -111,7 +111,7 @@ const authenticate = token => {
 	    }
     }
 
-    sendRequest(authRequest).then(response => {
+    vtubeAPI.sendRequest(authRequest).then(response => {
         if (!response.data.authenticated) {
             console.log ("Existing Vtube API token rejected, generating new auth token")
             getNewAuthToken()
@@ -141,7 +141,7 @@ vtubeAPI.parseSuperchat = superChat => {
 	            	hotkeyID: command.hotkeyID,
 	            }
             }
-            sendRequest(request)
+            vtubeAPI.sendRequest(request)
         }
     }
 }

@@ -4,6 +4,7 @@ const OAuth2 = google.auth.OAuth2
 const youtube = google.youtube('v3')
 
 import settings from './settings.js'
+import commands from './commands.js'
 
 import * as chat from './servers/chat.js'
 import * as fetch from './servers/fetch.js'
@@ -122,6 +123,7 @@ const findActiveChat = () => {
         mine: 'true'
     }, (err, response) => {
         if (err) {
+            console.log(err)
             console.log(`Couldn't find active chat. Trying again in ${settings.findChatInterval / 1000} seconds`)
             setTimeout(findActiveChat, settings.findChatInterval)
         } else {
@@ -129,7 +131,7 @@ const findActiveChat = () => {
             let liveChatId = latestChat.snippet.liveChatId
             console.log('Chat ID found', liveChatId)
 
-            chat.io.emit('chat_event', {
+            /*chat.io.emit('chat_event', {
                 id: "1",
                 authorDetails: {
                     isChatOwner: true,
@@ -144,7 +146,7 @@ const findActiveChat = () => {
                         messageText: "hello world"
                     }
                 }
-            })
+            })*/
             getChat(liveChatId, null)
         }
     })
@@ -197,8 +199,37 @@ const getChat = (liveChatId, nextPage) => {
                 chat.io.emit('chat_event', chatEvent)
                 fetch.io.emit('chat_event', chatEvent)
 
-                if (chatEvent.type == "superChatEvent") {
+                //vtube superchat (depracated)
+                /*if (chatEvent.type == "superChatEvent") {
                     vtubeAPI.parseSuperchat(chatEvent)
+                }*/
+
+                //commands
+                if (nextPage && Object.hasOwn(chatEvent.snippet, "displayMessage") && chatEvent.snippet.displayMessage && chatEvent.snippet.displayMessage.includes("!")) {
+                    let split = chatEvent.snippet.displayMessage.split()
+                    console.log(`split message with !: ${split}`)
+                    split.forEach((word, index) => {
+                        if (word[0] == '!' && commands.has(word.slice(1))) {
+                            let message = commands.get(word.slice(1))()
+                            if (message) {
+                                //Send Message in Chat
+                                let request = {
+                                    auth: googleAPI.oauth2Client,
+                                    part: "snippet",
+                                    resource: {
+                                        snippet: {
+                                            liveChatId,
+                                            type: "textMessageEvent",
+                                            textMessageDetails: {
+                                                messageText: message
+                                            }
+                                        }
+                                    }
+                                }
+                                youtube.liveChatMessages.insert(request).then(`Executed command ${word}`)
+                            }
+                        }
+                    })
                 }
             })
             setTimeout(() => getChat(liveChatId, response.data.nextPageToken), settings.chatInterval)

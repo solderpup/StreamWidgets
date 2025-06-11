@@ -41,6 +41,13 @@
                 const socket = io()
                 socket.on('chat_event', event => {
                     console.log('chat event: ', event)
+
+                    // Message Deleted
+                    /*if (event.snippet.type === "messageDeletedEvent") {
+                        $(`#${event.snippet.messageDeletedDetails.deletedMessageId}`).remove()
+                        return
+                    }*/
+
                     let eventHTML = $('<div>', {'class': 'event', id: event.id})
                     let eventHeader = $('<div>', {'class': 'event-header'}) // The top bar with all the bubbles
                     let eventBody = $('<div>', {'class': 'event-body'}) // The actual message
@@ -127,6 +134,7 @@
                     
                     $(eventHTML).append(eventHeader)
                     $(eventHTML).append(eventBody)
+                    $(eventHTML).attr('id', event.id)
                     $('#chat').append(eventHTML)
                     
                     // Remove old messages
