@@ -1,6 +1,6 @@
 const settings = {
     playing: "VS Code",
-    week: 1,
+    week: 2,
     month: 5,
     year: 2025,
     daysOff: [
@@ -16,16 +16,19 @@ const settings = {
     schedule: [
         [],
         [],
-        [{activity: "Coding Stream - Chatbot", start: '6PM', end: '9PM'}],
-        [{activity: "Mario Kart World", start: '6PM', end: '9PM'}],
-        [{activity: "Super Mario Eclipse", start: '6PM', end: '9PM'}],
+        [{activity: "Mario kart World", start: '6PM', end: '8PM'}],
+        [],
+        [{activity: "Super Mario Eclipse", start: '6PM', end: '8PM'}],
         [],
         [],
     ],
     attribution: {
-        artist: "Vivila777",
+        artist: "Solderpup",
         platforms: [
-            {platform: "X", name: "@vivila777"}
+            {platform: "Art Tag", name: "#soldersketch"},
+            {platform: "X", name: "@solderpup"},
+            {platform: "Bluesky", name: "@solderpup"},
+            {platform: "Instagram", name:"@solderpup.yt"}
         ]
     }  
 }
