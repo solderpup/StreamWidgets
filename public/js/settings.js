@@ -1,6 +1,6 @@
 const settings = {
     playing: "VS Code",
-    week: 2,
+    week: 3,
     month: 5,
     year: 2025,
     daysOff: [
@@ -16,9 +16,9 @@ const settings = {
     schedule: [
         [],
         [],
-        [{activity: "Mario kart World", start: '6PM', end: '8PM'}],
+        [{activity: "Programming Stream", start: '6PM', end: '8PM'}],
         [],
-        [{activity: "Super Mario Eclipse", start: '6PM', end: '8PM'}],
+        [{activity: "Black Ops III Zombies", start: '6PM', end: '8PM'}],
         [],
         [],
     ],
@@ -28,7 +28,7 @@ const settings = {
             {platform: "Art Tag", name: "#soldersketch"},
             {platform: "X", name: "@solderpup"},
             {platform: "Bluesky", name: "@solderpup"},
-            {platform: "Instagram", name:"@solderpup.yt"}
+            {platform: "Instagram", name:"@solderpup.yt"} 
         ]
     }  
 }
